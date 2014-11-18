@@ -93,10 +93,5 @@ namespace Labb2.Content
         {
             return m_life / MAX_LIFE;
         }
-
-        public void updateAndDraw(float elapsedTime) 
-        {
-            
-        }
     }
 }
