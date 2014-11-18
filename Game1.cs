@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Labb2.Content;
+using System;
 
 namespace Labb2
 {
@@ -11,11 +13,18 @@ namespace Labb2
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        SplitterSystem splitterSystem;
+        SplitterParticle splitterParticle;
+        private float elapsedTime;
 
         public Game1()
             : base()
         {
             graphics = new GraphicsDeviceManager(this);
+
+            graphics.PreferredBackBufferWidth = 400;
+            graphics.PreferredBackBufferHeight = 400;
+
             Content.RootDirectory = "Content";
         }
 
@@ -42,6 +51,11 @@ namespace Labb2
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            splitterSystem = new SplitterSystem(GraphicsDevice.Viewport, Content);
+
+            Random rand = new Random();
+            int randomNum = rand.Next(1, 100);
+            splitterParticle = new SplitterParticle(randomNum);
         }
 
         /// <summary>
@@ -62,7 +76,7 @@ namespace Labb2
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -75,8 +89,9 @@ namespace Labb2
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            
             // TODO: Add your drawing code here
+            splitterSystem.UpdateAndDraw(elapsedTime, splitterParticle.startPosision, spriteBatch);
 
             base.Draw(gameTime);
         }
