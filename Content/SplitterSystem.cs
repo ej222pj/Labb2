@@ -11,61 +11,55 @@ namespace Labb2.Content
 {
     class SplitterSystem
     {
-        private const int MAX_PARTICLES = 100;
-        Camera camera;
+        private SplitterParticle[] particles;
+        private int maxPartical = 100;
+        private float time = 0;
+        private static float runTime = 3;
+        private static float maxSpeed = 0.3f;
 
-        Texture2D m_textureAsset;
-
-        //State 
-        SplitterParticle[] m_particles = new SplitterParticle[MAX_PARTICLES];
-
-        public SplitterSystem(Viewport viewport, ContentManager content)
+        private Camera camera;
+        public SplitterSystem(Viewport viewPort)
         {
-            camera = new Camera(viewport);
+            camera = new Camera(viewPort.Width, viewPort.Height);
 
-            for (int i = 0; i < MAX_PARTICLES; i++)
-            {
-                m_particles[i] = new SplitterParticle(i);
-            }
+            particles = new SplitterParticle[maxPartical];
 
-            m_textureAsset = content.Load<Texture2D>("spark");
+            spawnNewSystem();
         }
-
-        //internal void LoadContent(Microsoft.Xna.Framework.Content.ContentManager a_content)
-        //{
-        //    m_textureAsset = a_content.Load<Texture2D>("spark");
-        //}
-
-        internal void UpdateAndDraw(float a_elapsedTime, Vector2 a_padPosition, /*float a_halfPadSize,*/ SpriteBatch spriteBatch)
+        private void spawnNewSystem()
         {
-            spriteBatch.Begin();
-            for (int i = 0; i < MAX_PARTICLES; i++)
+            Random rand = new Random();
+
+            for (int i = 0; i < maxPartical; i++)
             {
+                Vector2 direction = new Vector2(((float)rand.NextDouble() - 0.5f), ((float)rand.NextDouble() - 0.5f));
+                direction.Normalize();
+                direction = direction * ((float)rand.NextDouble() * maxSpeed);
 
-                //Updatera partikeln
-                m_particles[i].Update(a_elapsedTime, new Vector2(/*-a_halfPadSize + 2.0f * a_halfPadSize * */(float)i / (float)MAX_PARTICLES, 0), i);
-
-                //Rita bara ut levande partiklar
-                if (m_particles[i].IsAlive())
-                {
-
-                    //Viewpositioner
-                    Vector2 viewCenterPosition = camera.toViewCoordinates(a_padPosition.X + m_particles[i].m_position.X,
-                                                                            a_padPosition.Y + m_particles[i].m_position.Y);
-
-                    //Räkna ut storleken
-                    Rectangle destinationRectangle = new Rectangle((int)viewCenterPosition.X - 16, (int)viewCenterPosition.Y - 16, 32, 32);
-
-                    //Blenda ut färgen
-                    float a = m_particles[i].GetVisibility();
-                    Color particleColor = new Color(a, a, a, a);
-                    
-                    //rita ut partikeln
-                    spriteBatch.Draw(m_textureAsset, destinationRectangle, particleColor);
-                    
-                }
+                particles[i] = new SplitterParticle(direction);
             }
-            spriteBatch.End();
+        }
+        public void Update(float timeElapsed)
+        {
+            time += timeElapsed;
+
+            for (int i = 0; i < maxPartical; i++)
+            {
+                particles[i].Update(timeElapsed);
+            }
+
+            if (time > runTime)
+            {
+                time = 0;
+                spawnNewSystem();
+            }
+        }
+        public void Draw(SpriteBatch spriteBatch, Texture2D splitterTexture)
+        {
+            for (int i = 0; i < maxPartical; i++)
+            {
+                particles[i].Draw(spriteBatch, splitterTexture, camera);
+            }
         }
     }
 }

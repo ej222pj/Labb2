@@ -9,24 +9,13 @@ namespace Labb1.Content
 {
     class Camera
     {
-        public int width;
-        public int height;
+        public static int border = 10;
         private float scale;
-        public const int level_width = 10;
-        public const int level_height = 10;
-        private float scaleX;
-        private float scaleY;
 
-        public Camera(Viewport viewport)
+        public Camera(int width, int height)
         {
-            this.width = viewport.Width;
-            this.height = viewport.Height;
-        }
-
-        public void setDimensions()
-        {
-            scaleX = (float)width / (float)level_width;
-            scaleY = (float)height / (float)level_height;
+            int scaleX = (width - border * 2);
+            int scaleY = (height - border * 2);
 
             scale = scaleX;
             if (scaleY < scaleX)
@@ -34,17 +23,14 @@ namespace Labb1.Content
                 scale = scaleY;
             }
         }
-
-        public Vector2 toViewCoordinates(float modelX, float modelY)
+        public Rectangle scaleSplitter(float xPos, float yPos, float splitterSize)
         {
-            Vector2 view = new Vector2(modelX * scaleX, modelY * scaleY);
+            int vSize = (int)(splitterSize * scale);
 
-            return view;
-        }
+            int vX = (int)(xPos * scale + border);
+            int vY = (int)(yPos * scale + border);
 
-        public float getScale()
-        {
-            return scale;
+            return new Rectangle(vX, vY, vSize, vSize);
         }
     }
 }

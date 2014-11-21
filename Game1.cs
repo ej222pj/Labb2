@@ -14,7 +14,7 @@ namespace Labb2
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SplitterSystem splitterSystem;
-        SplitterParticle splitterParticle;
+        Texture2D splitterTexture;
         private float elapsedTime;
 
         public Game1()
@@ -37,7 +37,7 @@ namespace Labb2
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            splitterSystem = new SplitterSystem(GraphicsDevice.Viewport);
             base.Initialize();
         }
 
@@ -51,11 +51,7 @@ namespace Labb2
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            splitterSystem = new SplitterSystem(GraphicsDevice.Viewport, Content);
-
-            Random rand = new Random();
-            int randomNum = rand.Next(1, 100);
-            splitterParticle = new SplitterParticle(randomNum);
+            splitterTexture = Content.Load<Texture2D>("spark");
         }
 
         /// <summary>
@@ -76,7 +72,7 @@ namespace Labb2
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            splitterSystem.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -91,7 +87,7 @@ namespace Labb2
             GraphicsDevice.Clear(Color.CornflowerBlue);
             
             // TODO: Add your drawing code here
-            splitterSystem.UpdateAndDraw(elapsedTime, splitterParticle.startPosision, spriteBatch);
+            splitterSystem.Draw(spriteBatch, splitterTexture);
 
             base.Draw(gameTime);
         }
