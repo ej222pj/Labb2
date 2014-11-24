@@ -15,18 +15,18 @@ namespace Labb2.Content
         private int maxPartical = 100;
         private float time = 0;
         private static float runTime = 3;
-        private static float maxSpeed = 0.3f;
-
+        private static float maxSpeed = 0.4f;
         private Camera camera;
+
         public SplitterSystem(Viewport viewPort)
         {
             camera = new Camera(viewPort.Width, viewPort.Height);
 
             particles = new SplitterParticle[maxPartical];
 
-            spawnNewSystem();
+            newSystem();
         }
-        private void spawnNewSystem()
+        private void newSystem()
         {
             Random rand = new Random();
 
@@ -39,7 +39,8 @@ namespace Labb2.Content
                 particles[i] = new SplitterParticle(direction);
             }
         }
-        public void Update(float timeElapsed)
+
+        public void Draw(SpriteBatch spriteBatch, Texture2D splitterTexture, float timeElapsed)
         {
             time += timeElapsed;
 
@@ -47,15 +48,12 @@ namespace Labb2.Content
             {
                 particles[i].Update(timeElapsed);
             }
-
             if (time > runTime)
             {
                 time = 0;
-                spawnNewSystem();
+                newSystem();
             }
-        }
-        public void Draw(SpriteBatch spriteBatch, Texture2D splitterTexture)
-        {
+
             for (int i = 0; i < maxPartical; i++)
             {
                 particles[i].Draw(spriteBatch, splitterTexture, camera);

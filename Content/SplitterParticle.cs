@@ -20,7 +20,7 @@ namespace Labb2.Content
         {
             position = new Vector2(0.5f, 0.5f);
             velocity = Velocity;
-            acceleration = new Vector2(0, 0.3f);
+            acceleration = new Vector2(0, 0.7f);
 
         }
 
@@ -43,7 +43,7 @@ namespace Labb2.Content
         public void Draw(SpriteBatch spriteBatch, Texture2D splitterTexture, Camera camera)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(splitterTexture, camera.scaleSplitter(position.X, position.Y, splitterSize), Color.White);
+            spriteBatch.Draw(splitterTexture, camera.scaleParticles(position.X, position.Y, splitterSize), Color.White);
             spriteBatch.End();
         }
     }

@@ -23,7 +23,7 @@ namespace Labb1.Content
                 scale = scaleY;
             }
         }
-        public Rectangle scaleSplitter(float xPos, float yPos, float splitterSize)
+        public Rectangle scaleParticles(float xPos, float yPos, float splitterSize)
         {
             int vSize = (int)(splitterSize * scale);
 

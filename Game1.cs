@@ -72,7 +72,6 @@ namespace Labb2
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            splitterSystem.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -87,7 +86,7 @@ namespace Labb2
             GraphicsDevice.Clear(Color.CornflowerBlue);
             
             // TODO: Add your drawing code here
-            splitterSystem.Draw(spriteBatch, splitterTexture);
+            splitterSystem.Draw(spriteBatch, splitterTexture, (float)gameTime.ElapsedGameTime.TotalSeconds);
 
             base.Draw(gameTime);
         }
